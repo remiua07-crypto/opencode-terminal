@@ -54,6 +54,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ github.event.release.tag_name }}
         run: |
-          gh release upload "$TAG" \
-            android/app/build/outputs/apk/debug/app-debug.apk#opencode-terminal-$TAG.apk \
-            --clobber
+          cp android/app/build/outputs/apk/debug/app-debug.apk "opencode-terminal-$TAG.apk"
+          gh release upload "$TAG" "opencode-terminal-$TAG.apk" --clobber

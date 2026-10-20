@@ -2,6 +2,8 @@
 
 Giao diện **terminal** cho web UI của [OpenCode](https://opencode.ai) + app Android (APK) đi kèm.
 
+**[⬇ Tải APK v1.0.0](https://github.com/remiua07-crypto/opencode-terminal/releases/latest)** · Android 7.0+ · ~25 KB · debug-signed
+
 ![Chat](docs/session.png)
 
 Phiên mới — logo ASCII, composer kiểu prompt, thanh trạng thái dưới cùng:
