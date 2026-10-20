@@ -1,0 +1,49 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'ai.opencode.terminal'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "ai.opencode.terminal"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix ""
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    packagingOptions {
+        resources.excludes += ['META-INF/*']
+    }
+}
+
+// Đồng bộ skin từ ../skin vào assets mỗi lần build
+def skinDir = rootProject.projectDir.toPath().resolve("..").resolve("skin").normalize().toFile()
+
+tasks.register("syncSkin", Copy) {
+    from(skinDir) {
+        include "tui.css", "tui.js"
+    }
+    into "src/main/assets"
+}
+
+tasks.named("preBuild") {
+    dependsOn "syncSkin"
+}

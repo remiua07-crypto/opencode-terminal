@@ -1,0 +1,10 @@
+android/local.properties
+android/.gradle/
+android/build/
+android/app/build/
+android/captures/
+.idea/
+*.iml
+.DS_Store
+android/app/src/main/assets/tui.css
+android/app/src/main/assets/tui.js

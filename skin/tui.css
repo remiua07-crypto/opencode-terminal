@@ -1,0 +1,580 @@
+/* ==========================================================================
+   OpenCode web UI — "terminal" skin
+   Mô phỏng giao diện TUI: nền #0a0a0a, monospace, viền 1px, không bo góc.
+   Bảng màu lấy trực tiếp từ packages/ui/src/theme/themes/opencode.json
+   ========================================================================== */
+
+/* ---------- 1. Tokens ---------------------------------------------------- */
+html[data-color-scheme],
+html[data-color-scheme="light"],
+html[data-color-scheme="dark"] {
+  color-scheme: dark;
+
+  --tui-bg: #0a0a0a;
+  --tui-bg-1: #111111;
+  --tui-bg-2: #141414;
+  --tui-bg-3: #1e1e1e;
+  --tui-line: #1f1f1f;
+  --tui-line-2: #2c2c2c;
+  --tui-fg: #eeeeee;
+  --tui-muted: #808080;
+  --tui-faint: #5c5c5c;
+  --tui-accent: #fab283;
+  --tui-blue: #5c9cf5;
+  --tui-purple: #9d7cd8;
+  --tui-green: #7fd88f;
+  --tui-yellow: #f5a742;
+  --tui-red: #e06c75;
+  --tui-cyan: #56b6c2;
+
+  /* semantic tokens của app */
+  --v2-background-bg-deep: var(--tui-bg);
+  --v2-background-bg-base: var(--tui-bg);
+  --v2-background-bg-layer-01: var(--tui-bg-1);
+  --v2-background-bg-layer-02: var(--tui-bg-2);
+  --v2-background-bg-layer-03: var(--tui-bg-3);
+  --v2-background-bg-layer-04: #262626;
+  --v2-background-bg-inverse: var(--tui-fg);
+  --v2-background-bg-contrast: #303030;
+  --v2-background-bg-accent: var(--tui-accent);
+
+  --v2-text-text-base: var(--tui-fg);
+  --v2-text-text-muted: var(--tui-muted);
+  --v2-text-text-faint: var(--tui-faint);
+  --v2-text-text-inverse: var(--tui-bg);
+  --v2-text-text-contrast: var(--tui-bg);
+  --v2-text-text-accent: var(--tui-accent);
+  --v2-text-text-accent-hover: var(--tui-yellow);
+
+  --v2-icon-icon-base: var(--tui-fg);
+  --v2-icon-icon-muted: var(--tui-muted);
+  --v2-icon-icon-faint: var(--tui-faint);
+  --v2-icon-icon-contrast: var(--tui-bg);
+  --v2-icon-icon-accent: var(--tui-accent);
+
+  --v2-border-border-muted: #181818;
+  --v2-border-border-base: var(--tui-line);
+  --v2-border-border-strong: var(--tui-line-2);
+  --v2-border-border-focus: var(--tui-blue);
+
+  --v2-state-fg-danger: var(--tui-red);
+  --v2-state-bg-danger: #2a1618;
+  --v2-state-border-danger: #4a2428;
+  --v2-state-fg-warning: var(--tui-yellow);
+  --v2-state-bg-warning: #2a2113;
+  --v2-state-border-warning: #4a3a1c;
+  --v2-state-fg-success: var(--tui-green);
+  --v2-state-bg-success: #16241a;
+  --v2-state-border-success: #28402e;
+  --v2-state-fg-info: var(--tui-cyan);
+
+  /* mã màu syntax / markdown */
+  --syntax-comment: var(--tui-faint);
+  --syntax-keyword: var(--tui-purple);
+  --syntax-string: var(--tui-green);
+  --syntax-primitive: var(--tui-accent);
+  --syntax-variable: var(--tui-red);
+  --syntax-property: var(--tui-cyan);
+  --syntax-type: #e5c07b;
+  --syntax-constant: var(--tui-yellow);
+  --syntax-operator: var(--tui-cyan);
+  --syntax-punctuation: var(--tui-fg);
+
+  --font-family-text: "IBM Plex Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, "Cascadia Mono", Menlo, Consolas, monospace;
+  --font-family-sans: var(--font-family-text);
+  --font-family-mono: var(--font-family-text);
+}
+
+/* ---------- 2. Base ------------------------------------------------------ */
+* ,
+*::before,
+*::after {
+  border-radius: 0 !important;
+}
+
+html,
+body {
+  background: var(--tui-bg) !important;
+  color: var(--tui-fg) !important;
+  font-family: var(--font-family-text) !important;
+  font-size: 13px !important;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--tui-accent);
+  color: #0a0a0a;
+}
+
+*:focus-visible {
+  outline: 1px solid var(--tui-blue) !important;
+  outline-offset: 1px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #262626;
+  border: 2px solid #0a0a0a;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3a;
+}
+
+/* bỏ mọi bóng đổ / gradient trang trí */
+[class*="shadow"],
+[class*="drop-shadow"] {
+  box-shadow: none !important;
+  filter: none !important;
+}
+[class*="bg-gradient"] {
+  background-image: none !important;
+}
+
+/* ---------- 3. Titlebar -------------------------------------------------- */
+header[data-slot="titlebar-v2"] {
+  height: 30px !important;
+  background: var(--tui-bg) !important;
+  border-bottom: 1px solid var(--tui-line) !important;
+}
+
+header[data-slot="titlebar-v2"] > div {
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+}
+
+/* tab phiên = tab terminal */
+[data-slot="titlebar-tab-item"] {
+  height: 30px !important;
+  border-right: 1px solid var(--tui-line) !important;
+  background: transparent;
+}
+[data-slot="titlebar-tab-item"][data-active="true"],
+[data-slot="titlebar-tab-item"]:has(a[aria-current="page"]) {
+  background: var(--tui-bg-2) !important;
+  box-shadow: inset 0 1px 0 var(--tui-accent) !important;
+}
+[data-slot="tab-link"] {
+  padding: 0 8px !important;
+  gap: 6px;
+}
+[data-slot="tab-title"] {
+  font-size: 12px !important;
+  color: var(--tui-muted) !important;
+}
+[data-slot="titlebar-tab-item"][data-active="true"] [data-slot="tab-title"],
+[data-slot="titlebar-tab-item"]:has(a[aria-current="page"]) [data-slot="tab-title"] {
+  color: var(--tui-fg) !important;
+}
+[data-slot="tab-title"]::before {
+  content: attr(data-tui-index) ":";
+  color: var(--tui-faint);
+  margin-right: 4px;
+}
+[data-slot="project-avatar-slot"] {
+  width: 10px !important;
+  min-width: 10px !important;
+  color: var(--tui-accent);
+}
+[data-slot="tab-close"] button {
+  opacity: 0;
+  color: var(--tui-muted) !important;
+}
+[data-slot="titlebar-tab-item"]:hover [data-slot="tab-close"] button {
+  opacity: 1;
+}
+
+/* nút trên titlebar */
+header[data-slot="titlebar-v2"] button[data-component="icon-button-v2"] {
+  width: 26px !important;
+  height: 26px !important;
+  color: var(--tui-muted) !important;
+}
+header[data-slot="titlebar-v2"] button[data-component="icon-button-v2"] svg {
+  color: var(--tui-muted) !important;
+}
+header[data-slot="titlebar-v2"] button[data-component="icon-button-v2"]:hover {
+  background: var(--tui-bg-3) !important;
+  color: var(--tui-fg) !important;
+}
+
+/* ---------- 4. Sidebar / home ------------------------------------------- */
+[aria-label="Dự án"] {
+  width: 224px !important;
+  border-right: 1px solid var(--tui-line) !important;
+  background: var(--tui-bg) !important;
+}
+[aria-label="Dự án"] * {
+  font-family: var(--font-family-text) !important;
+}
+
+[data-slot="session-search"] input,
+input[placeholder] {
+  background: var(--tui-bg-1) !important;
+  border: 1px solid var(--tui-line) !important;
+  color: var(--tui-fg) !important;
+}
+input[placeholder]::placeholder {
+  color: var(--tui-faint) !important;
+}
+
+/* danh sách phiên: dòng terminal */
+button[class*="w-full"][class*="items-center"] {
+  border: 1px solid transparent;
+}
+button[class*="w-full"][class*="items-center"]:hover {
+  background: var(--tui-bg-2) !important;
+  border-color: var(--tui-line) !important;
+}
+
+/* logo ASCII chèn bởi tui.js */
+#tui-wordmark {
+  margin: 28px auto 22px;
+  width: max-content;
+  max-width: 100%;
+  overflow: hidden;
+  font-family: var(--font-family-text);
+  font-size: 10px;
+  line-height: 1.05;
+  white-space: pre;
+  color: var(--tui-fg);
+  background: linear-gradient(100deg, #fab283 0%, #d9a38c 35%, #8d8d8d 75%, #4a4a4a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  user-select: none;
+  pointer-events: none;
+}
+#tui-wordmark-caption {
+  text-align: center;
+  color: var(--tui-faint);
+  font-size: 11px;
+  margin: -10px 0 26px;
+  user-select: none;
+}
+
+/* ---------- 5. Timeline / messages -------------------------------------- */
+[data-slot="session-turn-message-container"] {
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+[data-slot="session-turn-message-content"] {
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+}
+
+/* tin nhắn người dùng: khối nền + gạch dọc, giống prompt TUI */
+[data-component="user-message"] {
+  align-items: stretch !important;
+}
+[data-component="user-message"] [data-slot="user-message-body"] {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-inline-start: 0 !important;
+  align-items: stretch !important;
+  background: var(--tui-bg-2) !important;
+  border-left: 7px solid var(--tui-bg) !important;
+  box-shadow: inset 1px 0 0 #262626;
+  padding: 7px 12px !important;
+  margin: 10px 0 14px !important;
+  color: var(--tui-fg) !important;
+  white-space: pre-wrap;
+}
+/* app tô xanh tin nhắn người dùng; ghi đè bằng tông terminal */
+[data-component="user-message"] [data-slot="user-message-text"] {
+  display: block !important;
+  width: auto !important;
+  background: transparent !important;
+  color: var(--tui-fg) !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+/* cột nội dung rộng như terminal (~100 cột) */
+[class*="max-w-session"] {
+  max-width: 920px !important;
+}
+
+[data-slot="user-message-meta-wrap"],
+[data-slot="user-message-meta"] {
+  color: var(--tui-faint) !important;
+  font-size: 11px !important;
+}
+
+/* phản hồi trợ lý: chữ trơn, thụt lề như output terminal */
+[data-slot="session-turn-assistant-content"] {
+  padding-left: 7px !important;
+  border-left: 1px solid transparent;
+}
+[data-slot="text-part-body"] {
+  color: var(--tui-fg) !important;
+}
+[data-slot="text-part-body"] p {
+  margin: 0 0 10px;
+}
+
+/* nhãn hành động copy hiện khi hover, kiểu dòng trạng thái */
+[data-slot="text-part-meta"],
+[data-slot="user-message-copy-wrapper"] {
+  color: var(--tui-faint) !important;
+  font-size: 10px !important;
+}
+
+/* tool call: dòng cây "└─" */
+[data-slot="basic-tool-tool-trigger-content"],
+[data-slot="context-tool-group-trigger"] {
+  color: var(--tui-muted) !important;
+  background: transparent !important;
+  border: 1px dashed transparent;
+  padding: 2px 6px !important;
+}
+[data-slot="basic-tool-tool-trigger-content"]:hover,
+[data-slot="context-tool-group-trigger"]:hover {
+  background: var(--tui-bg-1) !important;
+  border-color: var(--tui-line) !important;
+}
+[data-slot="basic-tool-tool-trigger-content"] svg,
+[data-slot="context-tool-group-trigger"] svg {
+  color: var(--tui-faint) !important;
+}
+[data-slot="basic-tool-tool-title"],
+[data-slot="context-tool-group-title"] {
+  color: var(--tui-muted) !important;
+  font-size: 12px !important;
+}
+[data-slot="basic-tool-tool-info"],
+[data-slot="context-tool-group-usage"] {
+  color: var(--tui-faint) !important;
+  font-size: 11px !important;
+}
+
+/* ---------- 6. Markdown / code ------------------------------------------ */
+[data-component="markdown"] {
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+}
+[data-component="markdown"] h1,
+[data-component="markdown"] h2,
+[data-component="markdown"] h3,
+[data-component="markdown"] h4 {
+  color: var(--tui-accent) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  margin: 18px 0 8px !important;
+}
+[data-component="markdown"] h1 { font-size: 15px !important; }
+[data-component="markdown"] h2 { font-size: 14px !important; }
+[data-component="markdown"] h3 { font-size: 13px !important; }
+[data-component="markdown"] a {
+  color: var(--tui-accent) !important;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+[data-component="markdown"] strong {
+  color: var(--tui-yellow) !important;
+  font-weight: 600 !important;
+}
+[data-component="markdown"] em {
+  color: #e5c07b !important;
+}
+[data-component="markdown"] blockquote {
+  border-left: 2px solid var(--tui-line-2) !important;
+  padding-left: 12px !important;
+  color: var(--tui-muted) !important;
+  margin-left: 0 !important;
+}
+[data-component="markdown"] hr {
+  border: 0;
+  border-top: 1px dashed var(--tui-line-2) !important;
+  margin: 16px 0 !important;
+}
+[data-component="markdown"] ul,
+[data-component="markdown"] ol {
+  padding-left: 20px !important;
+}
+[data-component="markdown"] li::marker {
+  color: var(--tui-accent) !important;
+}
+[data-component="markdown"] table {
+  border-collapse: collapse !important;
+  width: auto !important;
+}
+[data-component="markdown"] th,
+[data-component="markdown"] td {
+  border: 1px solid var(--tui-line) !important;
+  padding: 4px 10px !important;
+  background: transparent !important;
+}
+[data-component="markdown"] th {
+  color: var(--tui-accent) !important;
+  font-weight: 600 !important;
+}
+
+[data-component="markdown"] pre,
+[data-component="markdown-code"] pre {
+  background: #0d0d0d !important;
+  border: 1px solid var(--tui-line) !important;
+  border-left: 2px solid #333 !important;
+  padding: 10px 12px !important;
+  overflow-x: auto;
+}
+[data-component="markdown"] code {
+  font-family: var(--font-family-mono) !important;
+  font-size: 12px !important;
+}
+[data-component="markdown"] :not(pre) > code {
+  background: #171717 !important;
+  border: 1px solid #262626 !important;
+  padding: 0 4px !important;
+  color: var(--tui-green) !important;
+}
+
+/* ---------- 7. Composer -------------------------------------------------- */
+[data-component="composer"] {
+  background: var(--tui-bg-3) !important;
+  border: 1px solid #2a2a2a !important;
+  border-left: 2px solid var(--tui-blue) !important;
+  min-height: 88px !important;
+  box-shadow: none !important;
+}
+
+[data-component="composer-editor"] {
+  color: var(--tui-fg) !important;
+  padding: 12px 14px 4px !important;
+  font-size: 13px !important;
+  caret-color: var(--tui-accent);
+}
+
+/* placeholder kiểu prompt */
+[data-component="composer"] > div > div > div > div > div[class*="pointer-events-none"][class*="absolute"] {
+  color: var(--tui-muted) !important;
+  padding: 12px 14px 4px !important;
+}
+
+/* hàng điều khiển dưới: Build · Model · Provider · max */
+[data-slot="composer-controls"] button,
+[data-slot="composer-actions"] button {
+  color: var(--tui-muted) !important;
+  background: transparent !important;
+  font-size: 11.5px !important;
+}
+[data-slot="composer-controls"] button:hover,
+[data-slot="composer-actions"] button:hover {
+  color: var(--tui-fg) !important;
+  background: #2a2a2a !important;
+}
+[data-slot="composer-controls"] svg[data-component="opencode-logo"] {
+  opacity: 1 !important;
+  color: var(--tui-accent) !important;
+}
+
+/* nút gửi: ô vuông đặc */
+[data-action="composer-submit"] {
+  background: var(--tui-accent) !important;
+  color: #0a0a0a !important;
+  border: 1px solid var(--tui-accent) !important;
+  width: 26px !important;
+  height: 26px !important;
+}
+[data-action="composer-submit"]:hover {
+  background: var(--tui-yellow) !important;
+}
+[data-action="composer-submit"] svg {
+  color: #0a0a0a !important;
+}
+[data-action="composer-submit"][disabled] {
+  background: #2a2a2a !important;
+  border-color: #2a2a2a !important;
+  color: #666 !important;
+}
+
+/* dock composer: nền liền, viền trên 1px */
+[data-component="session-composer-dock"] {
+  background: var(--tui-bg) !important;
+  border-top: 1px solid var(--tui-line) !important;
+  padding-top: 8px !important;
+}
+
+/* ---------- 8. Menu / dialog -------------------------------------------- */
+[role="menu"],
+[role="dialog"],
+[data-component="dialog-stack"] > * > * {
+  background: var(--tui-bg-1) !important;
+  border: 1px solid var(--tui-line-2) !important;
+  box-shadow: 0 8px 24px #000000cc !important;
+}
+[role="menuitem"]:hover,
+[role="option"]:hover {
+  background: var(--tui-bg-3) !important;
+  color: var(--tui-accent) !important;
+}
+
+/* ---------- 9. Status bar (chèn bởi tui.js) ----------------------------- */
+#tui-statusbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 90;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+  background: var(--tui-bg);
+  border-top: 1px solid var(--tui-line);
+  color: var(--tui-faint);
+  font-family: var(--font-family-text);
+  font-size: 11px;
+  user-select: none;
+  pointer-events: none;
+}
+#tui-statusbar b {
+  color: var(--tui-muted);
+  font-weight: 400;
+}
+#tui-statusbar .tui-dot {
+  color: var(--tui-blue);
+}
+#tui-statusbar .tui-spacer {
+  flex: 1;
+}
+#tui-statusbar .tui-meter {
+  color: #2b4a72;
+  letter-spacing: 1px;
+}
+
+/* chừa chỗ cho status bar */
+html body .h-dvh {
+  height: calc(100dvh - 22px) !important;
+}
+
+/* ---------- 10. Mobile --------------------------------------------------- */
+@media (max-width: 720px) {
+  #tui-statusbar {
+    display: none;
+  }
+  html body .h-dvh {
+    height: 100dvh !important;
+  }
+  header[data-slot="titlebar-v2"] {
+    height: 34px !important;
+  }
+  [data-slot="titlebar-tab-item"] {
+    height: 34px !important;
+  }
+  [data-slot="user-message-body"] {
+    border-left-width: 5px !important;
+  }
+  [data-component="composer"] {
+    border-left-width: 2px !important;
+  }
+}
